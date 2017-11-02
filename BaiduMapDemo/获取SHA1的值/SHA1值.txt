@@ -1,0 +1,13 @@
+﻿发布版SHA1的值：
+34:09:FA:34:F7:28:5D:5C:53:F0:AB:6C:1F:46:DB:1B:F9:0C:C8:B6
+开发版SHA1的值：
+11:C1:18:DC:BE:20:E1:92:91:12:57:AD:69:14:72:0F:91:96:73:F3
+包名：
+com.example.zombieboy.baidumapdemo
+
+访问应用AK：
+7ygcHYDqSsMfHE5i7f2ECDZDhItWxfib
+
+安全码：
+34:09:FA:34:F7:28:5D:5C:53:F0:AB:6C:1F:46:DB:1B:F9:0C:C8:B6;com.example.zombieboy.baidumapdemo
+11:C1:18:DC:BE:20:E1:92:91:12:57:AD:69:14:72:0F:91:96:73:F3;com.example.zombieboy.baidumapdemo
