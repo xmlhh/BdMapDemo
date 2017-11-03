@@ -9,16 +9,40 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.zombieboy.baidumapdemo.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:clickable="true" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--<TextView android:text="Hello Map!"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="地点信息："
+                android:textColor="#95A1AA"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""/>
+        </LinearLayout>
+
+        <com.baidu.mapapi.map.TextureMapView
+            android:id="@+id/bmapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true" />
+
+    </LinearLayout>
 
     <!--<ImageButton-->
         <!--android:id="@+id/ib_small"-->
@@ -67,38 +91,50 @@
         <!--android:layout_marginBottom="1dp"-->
         <!--android:background="@android:color/darker_gray" />-->
 
-    <!--卫星模式和普通模式切换-->
-    <ImageButton
-        android:id="@+id/ib_mode"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@android:color/darker_gray"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="7dp"
-        android:layout_marginBottom="91dp"/>
-
-    <!--回到当前位置-->
-    <ImageButton
-        android:id="@+id/ib_loc"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/ib_mode"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="30dp"
-        android:background="@android:color/darker_gray" />
 
     <!--实时交通地图-->
     <ImageButton
         android:id="@+id/ib_traffic"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="100dp"
+        android:background="@mipmap/traffic_light" />
+
+    <!--卫星模式和普通模式切换-->
+    <ImageButton
+        android:id="@+id/ib_mode"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="140dp"
+        android:background="@mipmap/switch_model" />
+
+    <!--回到当前位置-->
+    <ImageButton
+        android:id="@+id/ib_loc"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignLeft="@+id/ib_loc"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="7dp"
-        android:layout_marginBottom="102dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_marginBottom="80dp"
+        android:background="@mipmap/goback_current_location" />
+
+    <!--&lt;!&ndash;实时交通地图&ndash;&gt;-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/ib_traffic"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignLeft="@+id/ib_loc"-->
+        <!--android:layout_marginLeft="7dp"-->
+        <!--android:layout_marginBottom="102dp"-->
+        <!--android:background="@mipmap/traffic_light" />-->
 
 </RelativeLayout>

@@ -16,6 +16,7 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
@@ -35,8 +36,10 @@ public class MainActivity extends AppCompatActivity {
     //定位相关
     private LocationClient mLocationClient;
     private MyLocationListener mLocationListener;
+    private MyLocationConfiguration.LocationMode mCurrentMode;
     //是否第一次定位，如果是第一次定位的话要将自己的位置显示在地图 中间
     private boolean isFirstLocation = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +54,18 @@ public class MainActivity extends AppCompatActivity {
         //初始化地图
         InitMap();
         //定位
-        InitLocation();
+        InitLocal();
 
     }
 
 
+    /**
+     * @author by lhh
+     * @brief 初始化控件
+     * @method InitMap()
+     * @param 无
+     * @return void
+     * */
     // 初始化地图
     private void InitMap(){
         // 获取地图控件
@@ -105,8 +115,13 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
-
-    // 初始化控件
+    /**
+     * @author by lhh
+     * @brief 初始化控件
+     * @method InitView()
+     * @param 无
+     * @return void
+     * */
     private void InitView(){
         //地图控制按钮
 //        ib_large = (ImageButton)findViewById(R.id.ib_large);
@@ -233,24 +248,60 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
 
-    // 初始化定位
-    private void InitLocation(){
+    /**
+     * @author by lhh
+     * @brief 初始化控件
+     * @method InitLocal()
+     * @param 无
+     * @return void
+     * */
+    private void InitLocal() {
         //定位客户端的设置
+        mBdMap.setMyLocationEnabled(true);
         mLocationClient = new LocationClient(this);
         mLocationListener = new MyLocationListener();
         //注册监听
         mLocationClient.registerLocationListener(mLocationListener);
-        //配置定位
-        LocationClientOption option = new LocationClientOption();
-        option.setCoorType("bd09ll");//坐标类型
-        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        option.setOpenGps(true);//打开Gps
-        option.setScanSpan(1000);//1000毫秒定位一次
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        mLocationClient.setLocOption(option);
+
+        // 配置定位
+        InitLocation();
+
     }
 
-    // 开启定位
+    /**
+     * @author by lhh
+     * @brief 初始化控件
+     * @method InitLocation()
+     * @param 无
+     * @return void
+     * */
+    private void InitLocation() {
+        //配置定位
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy
+        );//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
+        option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
+        int span = 10000;
+        option.setScanSpan(span);//可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
+        option.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
+        option.setOpenGps(true);//可选，默认false,设置是否使用gps
+        option.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
+        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+        option.setIgnoreKillProcess(false);//可选，默认false，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认杀死
+        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
+        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤gps仿真结果，默认需要
+        mLocationClient.setLocOption(option);
+        mLocationClient.start();
+    }
+
+    /**
+     * @author by lhh
+     * @brief 开启定位
+     * @method onStart()
+     * @param 无
+     * @return void
+     * */
     protected void onStart() {
         super.onStart();
         //开启定位
@@ -260,7 +311,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // 关闭定位
+    /**
+     * @author by lhh
+     * @brief 关闭定位
+     * @method onStop()
+     * @param 无
+     * @return void
+     * */
     protected void onStop() {
         super.onStop();
         //关闭定位
@@ -299,32 +356,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //自定义的定位监听
-    private class MyLocationListener implements BDLocationListener{
+    /**
+     * @author by lhh
+     * @brief 定位SDK监听函数
+     * @method onReceiveLocation()
+     * @param 无
+     * @return void
+     * */
+    public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
-            //将获取的location信息给百度map
-            MyLocationData data = new MyLocationData.Builder()
+            mBdMap.setMyLocationEnabled(true);
+            MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
                     // 此处设置开发者获取到的方向信息，顺时针0-360
                     .direction(100)
                     .latitude(location.getLatitude())
                     .longitude(location.getLongitude())
                     .build();
-            mBdMap.setMyLocationData(data);
+            // 设置定位数据
+            mBdMap.setMyLocationData(locData);
+
             if(isFirstLocation){
-                //获取经纬度
-                LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
-                MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(ll);
-                //mBaiduMap.setMapStatus(status);//直接到中间
+                // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+                //mCurrentMarker = BitmapDescriptorFactory.fromResource(R.drawable.navi_map_gps_locked);
+                //第三个参数是位置图片没有就默认
+                MyLocationConfiguration config = new MyLocationConfiguration(mCurrentMode, true, null);
+                mBdMap.setMyLocationConfigeration(config);
+                //获取经纬度，以我的位置为中心
+                LatLng latlng = new LatLng(location.getLatitude(),location.getLongitude());
+                MapStatusUpdate status = MapStatusUpdateFactory.newLatLng(latlng);
                 mBdMap.animateMapStatus(status);//动画的方式到中间
                 isFirstLocation = false;
                 showInfo("位置：" + location.getAddrStr());
             }
         }
-
     }
-
 
 
 }
