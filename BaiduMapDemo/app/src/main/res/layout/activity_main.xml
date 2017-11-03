@@ -19,4 +19,86 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:clickable="true" />
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/ib_small"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:background="@android:color/darker_gray"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="7dp"-->
+        <!--android:layout_marginBottom="91dp"/>-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/ib_large"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_above="@+id/ib_small"-->
+        <!--android:layout_alignLeft="@+id/ib_small"-->
+        <!--android:layout_marginBottom="1dp"-->
+        <!--android:background="@android:color/darker_gray" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/ib_mode"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_above="@+id/ib_large"-->
+        <!--android:layout_alignLeft="@+id/ib_large"-->
+        <!--android:layout_marginBottom="1dp"-->
+        <!--android:background="@android:color/darker_gray" />-->
+
+    <!--<ImageButton-->
+        <!--android:id="@+id/ib_loc"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignTop="@+id/ib_mode"-->
+        <!--android:layout_marginLeft="7dp"-->
+        <!--android:background="@android:color/darker_gray" />-->
+
+    <!--&lt;!&ndash;交通地图&ndash;&gt;-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/ib_traffic"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_above="@+id/ib_loc"-->
+        <!--android:layout_alignLeft="@+id/ib_loc"-->
+        <!--android:layout_marginBottom="1dp"-->
+        <!--android:background="@android:color/darker_gray" />-->
+
+    <!--卫星模式和普通模式切换-->
+    <ImageButton
+        android:id="@+id/ib_mode"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@android:color/darker_gray"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="7dp"
+        android:layout_marginBottom="91dp"/>
+
+    <!--回到当前位置-->
+    <ImageButton
+        android:id="@+id/ib_loc"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/ib_mode"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="30dp"
+        android:background="@android:color/darker_gray" />
+
+    <!--实时交通地图-->
+    <ImageButton
+        android:id="@+id/ib_traffic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/ib_loc"
+        android:layout_marginLeft="7dp"
+        android:layout_marginBottom="102dp"
+        android:background="@android:color/darker_gray" />
+
 </RelativeLayout>
