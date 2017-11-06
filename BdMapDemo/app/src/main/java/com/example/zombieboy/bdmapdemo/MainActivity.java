@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
@@ -17,19 +19,31 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnGetGeoCoderResultListener {
 
     // 百度地图控件
     private MapView mMapView = null;
+    //private TextureMapView mMapView = null;
     // 百度地图
     private BaiduMap mBdMap;
     // 按钮
@@ -40,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private LocationClient mLocationClient;
     private MyLocationListener mMyLocationListener;
     private MyLocationConfiguration.LocationMode mCurrentMode;
+
+    // GEO
+    private Marker mMark;
+    private GeoCoder mGeoSearch;
+    TextView mTvinfo;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
         InitMap();
         // 定位
         //InitLocal();
+        //GEO
+        InitGeo();
     }
 
 
@@ -151,6 +174,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        mTvinfo =(TextView)findViewById(R.id.tv_info);
+
+
     }
 
 
@@ -232,81 +259,68 @@ public class MainActivity extends AppCompatActivity {
     //////////////////////////////////////////////////////////////////////////////////
 
 
+    /**
+     * @author by lhh
+     * @brief 监听地图点击事件，将点击获取的经纬度转换为具体地点信息，并在点击的位置做个标记
+     * @method InitGeo()
+     * @param 无
+     * @return void
+     * */
+    private void InitGeo() {
+        //Geo
+        mGeoSearch = GeoCoder.newInstance();
+        mGeoSearch.setOnGetGeoCodeResultListener(this);
+        //////////////////////////////////////////////////////////////////////////////////
+     /*地图监听GEO转换*/
+        mBdMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                final LatLng lat = latLng;
+                mGeoSearch.reverseGeoCode(new ReverseGeoCodeOption()
+                        .location(lat));
+            }
 
-//    public class MyLocationListener implements BDLocationListener {
-//        @Override
-//        public void onReceiveLocation(BDLocation location) {
-//            // Receive Location
-////            appSession.setBdLocation(location);
-//            Log.i("baidu", "baidu");
-//            StringBuffer sb = new StringBuffer(256);
-//            sb.append("time : ");
-//            sb.append(location.getTime());
-//            sb.append("\nerror code : ");
-//            sb.append(location.getLocType());
-//            sb.append("\nlatitude : ");
-//            sb.append(location.getLatitude());
-//            sb.append("\nlontitude : ");
-//            sb.append(location.getLongitude());
-//            sb.append("\nradius : ");
-//            sb.append(location.getRadius());
-//            if (location.getLocType() == BDLocation.TypeGpsLocation) {
-//                sb.append("\nspeed : ");
-//                sb.append(location.getSpeed());
-//                sb.append("\nsatellite : ");
-//                sb.append(location.getSatelliteNumber());
-//                sb.append("\ndirection : ");
-//                sb.append("\naddr : ");
-//                sb.append(location.getAddrStr());
-//                sb.append(location.getDirection());
-//            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-//                sb.append("\naddr : ");
-//                sb.append(location.getAddrStr());
-//                sb.append("\noperationers:");
-//                sb.append(location.getOperators());
-//            }
-//            double lat= location.getLatitude();
-//            double lon=location.getLongitude();
-//            Log.i("province",location.getProvince()+"");
-//            Log.i("city",location.getCity()+"");
-//            Log.i("lat", "" + lat);
-//            Log.i("lon",""+lon);
-//            Log.i("BaiduLocationApiDem", sb.toString());
-//        }
-//    }
-//
-//
-//    public void location(BDLocationListener listener) {
-//        mLocationClient = new LocationClient(getApplicationContext());
-//
-//        LocationClientOption option = new LocationClientOption();
-//        option.setIsNeedAddress(true);// 中文地址
-//        option.setCoorType("bd09ll");// gcj02 国测局经纬度坐标系 ；bd09 百度墨卡托坐标系；bd09ll
-//        // 百度经纬度坐标系
-//        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);// 设置定位模式
-//        option.setScanSpan(5*60000);//检查周期 小于1秒的按1秒
-//        mLocationClient.setLocOption(option);
-//        Log.i("2", "2");
-//        mLocationClient.registerLocationListener(listener);
-//        mLocationClient.start();
-//    }
-//    /**
-//     * 用这个方法的时候要注意ct是 调用这个函数类的context，方法的参数应该是this.getApplication传到这个方法里面去，而不是这个类的context，一定要注意。
-//     * @param ct
-//     */
-//    public void location(Context ct) {
-//        mLocationClient = new LocationClient(ct);
-//        LocationClientOption option = new LocationClientOption();
-//        option.setIsNeedAddress(true);// 中文地址
-//        option.setCoorType("bd09ll");// gcj02 国测局经纬度坐标系 ；bd09 百度墨卡托坐标系；bd09ll
-//        // 百度经纬度坐标系
-//        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);// 设置定位模式
-//        option.setScanSpan(5 * 60000);//检查周期 小于1秒的按1秒
-//        mLocationClient.setLocOption(option);
-//        Log.i("2", "2");
-//        mLocationClient.registerLocationListener(new MyLocationListener());
-//        mLocationClient.start();
-//    }
+            @Override
+            public boolean onMapPoiClick(MapPoi mapPoi) {
+                return false;
+            }
+
+        });
+        //////////////////////////////BaiduMap.OnMapClickListener///////////////////////////////////
+    }
+    ///////////////OnGetGeoCoderResultListener////////////////////////////////////////////
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+
+    }
+
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
+        if (TextUtils.isEmpty(reverseGeoCodeResult.getAddress())) {
+            //Toast.makeText(MainActivity.this, "地点解析失败，请重新选择", Toast.LENGTH_SHORT).show();
+            showInfo("地点解析失败，请重新选择");
+        } else {
+            if (null != mMark) {
+                mMark.remove();
+            }
+
+
+            mTvinfo.setText(reverseGeoCodeResult.getAddress());
+
+            /////show pos
+            LatLng from = new LatLng(reverseGeoCodeResult.getLocation().latitude,
+                    reverseGeoCodeResult.getLocation().longitude);
+            BitmapDescriptor bdB = BitmapDescriptorFactory
+                    .fromResource(R.mipmap.click_location_blue);
+            OverlayOptions ooP = new MarkerOptions().position(from).icon(bdB);
+            mMark = (Marker) (mBdMap.addOverlay(ooP));
+            MapStatus mMapStatus = new MapStatus.Builder().target(from)
+                    .build();
+            /////show pos
+        }
+    }
+
+
 
 
 

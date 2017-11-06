@@ -24,11 +24,12 @@
             android:clickable="true" />
 
         <LinearLayout
+            android:id="@+id/location_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -44,6 +45,55 @@
                 android:textColor="#95A1AA"
                 android:textSize="17sp"/>
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/user_icon"
+            android:gravity="center" >
+            >
+
+            <!--搜索编辑框-->
+            <EditText
+                android:id="@+id/login_input_username"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginRight="5dp"
+                android:layout_margin="10dp"
+                android:minHeight="40dp"
+                android:paddingLeft="40dp"
+                android:paddingRight="60dp"
+                android:hint="搜地点、查公交、找路线"
+                android:textColorHint="#95A1AA"
+                android:textColor="@android:color/black"
+                android:textCursorDrawable="@drawable/edittext_cursor"
+                android:background="@drawable/edittext_selector"
+                android:singleLine="true" />
+
+            <!--用户图标-->
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="21dp"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginLeft="20dp"
+                android:background="@mipmap/ic_launcher"
+                android:visibility="visible" />
+
+            <!--搜索按钮-->
+            <Button
+                android:id="@+id/bt_search"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="1dp"
+                android:background="@mipmap/icon_bus_station" />
+
+        </FrameLayout>
 
     </FrameLayout>
 
